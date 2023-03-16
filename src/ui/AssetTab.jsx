@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { MdArrowBackIosNew } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
 import { networks } from "./data";
@@ -8,10 +9,17 @@ const AssetTab = ({
   selectedAsset,
   setSelectedAsset,
 }) => {
+  const [searchparam, setSearchParam] = useState("");
+
+  const filteredAssets = networks.filter((network) =>
+    network.name.toLowerCase().includes(searchparam.toLowerCase())
+  );
+
   const handleAssetSelect = (asset) => {
     setSelectedAsset(asset);
     setAssetTab(false);
   };
+
   return (
     <div className="networktab__container">
       <div className="networktab--header">
@@ -23,11 +31,11 @@ const AssetTab = ({
         </h2>
       </div>
       <div className="searchinput">
-        <input type="text" />
+        <input type="text" onChange={(e) => setSearchParam(e.target.value)} />
         <CiSearch size={20} />
       </div>
       <div className="networktab">
-        {networks.map((network, idx) => (
+        {filteredAssets.map((network, idx) => (
           <div
             className="networktab--grid"
             key={idx}
