@@ -6,9 +6,13 @@ const TextInput = ({
   disabled,
   value,
   onSelectClick,
+  iconUrl,
 }) => {
   return (
     <div className="textinput__container">
+      <div className="iconappended">
+        {iconUrl && <img src={iconUrl} alt="icon" />}
+      </div>
       <input
         onChange={onChange}
         value={value}

@@ -1,12 +1,7 @@
 import { MdArrowBackIosNew } from "react-icons/md";
 import { networks } from "./data";
 
-const NetworkTab = ({
-  networktab,
-  setNetworkTab,
-  selectedNetwork,
-  setSelectedNetwork,
-}) => {
+const NetworkTab = ({ networktab, setNetworkTab, setSelectedNetwork }) => {
   const handleNetworkSelect = (network) => {
     setSelectedNetwork(network);
     setNetworkTab(false);

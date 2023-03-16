@@ -1,0 +1,21 @@
+.vnin--container {
+  min-height: 695px;
+  overflow-y: auto;
+  width: 561px;
+  max-width: 100%;
+  background: #ffffff;
+  padding: 1.5em;
+  z-index: 9999;
+  border-radius: 6px;
+}
+
+.vninclose {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.vnincontent {
+  margin-top: 1.4em;
+  height: 695px;
+  border: none;
+}

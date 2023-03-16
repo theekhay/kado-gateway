@@ -3,12 +3,7 @@ import { MdArrowBackIosNew } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
 import { networks } from "./data";
 
-const AssetTab = ({
-  assetTab,
-  setAssetTab,
-  selectedAsset,
-  setSelectedAsset,
-}) => {
+const AssetTab = ({ assetTab, setAssetTab, setSelectedAsset }) => {
   const [searchparam, setSearchParam] = useState("");
 
   const filteredAssets = networks.filter((network) =>
