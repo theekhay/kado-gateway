@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import Button from "../components/Button";
 import TextInput from "../components/TextInput";
 import NetworkTab from "../ui/NetworkTab";
@@ -14,6 +14,8 @@ const GateWay = () => {
   const [selectedAsset, setSelectedAsset] = useState({});
   const [amountInUsd, setAmountInUsd] = useState(0);
   const [show, setShow] = useState(false);
+  const [quote, setQuote] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const getStatusResponse = async () => {
     const res = await axios.get(
@@ -56,6 +58,29 @@ const GateWay = () => {
     } else return;
   };
 
+  const handleAmountChange = (e) => {
+    setAmountInUsd(e.target.value);
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(
+        `
+      https://dev-api.kado.money/v1/ramp/quote?amountUsd=${amountInUsd}&blockchain=ethereum&asset=ETH&transactionType=buy&partner=prime_trust&fiatMethod=card`
+      )
+
+      .then((res) => {
+        setLoading(false);
+        if (res.status === 200) {
+          setQuote(res.data.data.quote.receiveUnitCountAfterFees);
+        } else {
+          setQuote("No quote available");
+        }
+      })
+      .catch((err) => setLoading(false));
+  }, [amountInUsd]);
+
   return (
     <>
       {!networktab && !assetTab && (
@@ -68,20 +93,23 @@ const GateWay = () => {
               onSelectClick={() => setNetworkTab(true)}
               defaultValue={selectedNetwork.name}
               iconUrl={selectedNetwork.icon}
+              prefix="Network"
             />
             <TextInput
               placeholder="Asset"
               type="text"
               disabled={true}
               onSelectClick={() => setAssetTab(true)}
-              defaultValue={selectedAsset.name}
+              defaultValue={selectedAsset.symbol}
               iconUrl={selectedAsset.icon}
+              prefix="Asset"
             />
             <TextInput
               placeholder="Amount in USD"
               type="number"
-              onChange={(e) => setAmountInUsd(e.target.value)}
+              onChange={handleAmountChange}
             />
+            {loading ? <p>Fetching quotes...</p> : <p>{quote}</p>}
             <Button buttonText="Ramp" onClick={() => setShow(true)} />
           </div>
         </div>

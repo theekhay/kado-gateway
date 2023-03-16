@@ -7,9 +7,12 @@ const TextInput = ({
   value,
   onSelectClick,
   iconUrl,
+  prefix,
+  onBlur,
 }) => {
   return (
     <div className="textinput__container">
+      <div className="textinput__prefix">{<span>{prefix}</span>}</div>
       <div className="iconappended">
         {iconUrl && <img src={iconUrl} alt="icon" />}
       </div>
@@ -20,6 +23,11 @@ const TextInput = ({
         placeholder={placeholder}
         disabled={disabled}
         defaultValue={defaultValue}
+        style={{
+          paddingLeft: prefix ? "7rem" : "0.5rem",
+          zIndex: "1",
+        }}
+        onBlur={onBlur}
       />
       <div className="textinput__button">
         {onSelectClick && <button onClick={onSelectClick}>Select</button>}
