@@ -1,7 +1,16 @@
 import { MdArrowBackIosNew } from "react-icons/md";
 import { networks } from "./data";
 
-const NetworkTab = ({ networktab, setNetworkTab }) => {
+const NetworkTab = ({
+  networktab,
+  setNetworkTab,
+  selectedNetwork,
+  setSelectedNetwork,
+}) => {
+  const handleNetworkSelect = (network) => {
+    setSelectedNetwork(network);
+    setNetworkTab(false);
+  };
   return (
     <div className="networktab__container">
       <div className="networktab--header">
@@ -16,7 +25,11 @@ const NetworkTab = ({ networktab, setNetworkTab }) => {
       <p>Select the network you would like to send assets on.</p>
       <div className="networktab">
         {networks.map((network, idx) => (
-          <div className="networktab--grid" key={idx}>
+          <div
+            className="networktab--grid"
+            key={idx}
+            onClick={() => handleNetworkSelect(network)}
+          >
             <div className="networktab--grid--left">
               <img src={network.icon} alt={network.name} />
               {network.name}

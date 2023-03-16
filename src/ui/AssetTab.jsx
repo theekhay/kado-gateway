@@ -2,7 +2,16 @@ import { MdArrowBackIosNew } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
 import { networks } from "./data";
 
-const AssetTab = ({ assetTab, setAssetTab }) => {
+const AssetTab = ({
+  assetTab,
+  setAssetTab,
+  selectedAsset,
+  setSelectedAsset,
+}) => {
+  const handleAssetSelect = (asset) => {
+    setSelectedAsset(asset);
+    setAssetTab(false);
+  };
   return (
     <div className="networktab__container">
       <div className="networktab--header">
@@ -19,7 +28,11 @@ const AssetTab = ({ assetTab, setAssetTab }) => {
       </div>
       <div className="networktab">
         {networks.map((network, idx) => (
-          <div className="networktab--grid" key={idx}>
+          <div
+            className="networktab--grid"
+            key={idx}
+            onClick={() => handleAssetSelect(network)}
+          >
             <div className="networktab--grid--left">
               <div className="asset__format">
                 <div className="asset__format--left">

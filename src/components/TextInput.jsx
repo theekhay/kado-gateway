@@ -1,9 +1,10 @@
 const TextInput = ({
   placeholder,
-  value,
+  defaultValue,
   onChange,
   type,
   disabled,
+  value,
   onSelectClick,
 }) => {
   return (
@@ -14,6 +15,7 @@ const TextInput = ({
         type={type}
         placeholder={placeholder}
         disabled={disabled}
+        defaultValue={defaultValue}
       />
       <div className="textinput__button">
         {onSelectClick && <button onClick={onSelectClick}>Select</button>}
