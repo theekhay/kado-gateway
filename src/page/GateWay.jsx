@@ -17,46 +17,61 @@ const GateWay = () => {
   const [quote, setQuote] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const getStatusResponse = async () => {
-    const res = await axios.get(
-      "https://dev-api.kado.money/v1/public/orders/6408fd3e24c501549aaac9fd"
-    );
-    /* console.log(res) */
-    setTimeout(() => {
-      /* setShowModal(false); */
-    }, 1000);
-    if (res.status === 200) {
-      console.log("sending message to parent window....");
-      postRobot.send(window.parent, "message", {
-        message: res?.data?.data?.transferStatus,
-        orderId: res?.data?.data?.orderId,
-      });
+   var listener = postRobot.on('getUser', function(event) {
+    console.log('logging to console...')
+});
 
-      //receiver
-      postRobot.on("message", async (event) => {
-        console.log("consuming message from window  ....");
-        await new Promise((r) => setTimeout(r, 2000));
-        /*  setTransactionModal(true); */
+listener.cancel();
 
-        if (event.data.message === "settled") {
-          /*  setTransactionMessage(`Fetching transaction status ...`); */
-          // setTimeout(() => {
-          axios
-            .get(
-              "https://dev-api.kado.money/v1/public/orders/6408fd3e24c501549aaac9fd"
-            )
-            .then(async (res) => {
-              if (res.status === 200) {
-                await new Promise((r) => setTimeout(r, 2000));
-                /*  setTransactionMessage(res.data.data.transferStatus); */
-              }
-            })
-            .catch((err) => console.log(err));
-          // })
-        } else console.log("failed");
-      });
-    } else return;
-  };
+// postRobot.on("message", async (event) => {
+//         console.log("consuming message from window  ....");   
+//       });
+
+// postRobot.on('getUser', { domain: 'http://localhost' }, function(event) {
+
+//     console.log("consuming message from window  ....");   
+// });
+
+  // const getStatusResponse = async () => {
+  //   const res = await axios.get(
+  //     "https://dev-api.kado.money/v1/public/orders/6408fd3e24c501549aaac9fd"
+  //   );
+  //   /* console.log(res) */
+  //   setTimeout(() => {
+  //     /* setShowModal(false); */
+  //   }, 1000);
+  //   if (res.status === 200) {
+  //     console.log("sending message to parent window....");
+  //     postRobot.send(window.parent, "message", {
+  //       message: res?.data?.data?.transferStatus,
+  //       orderId: res?.data?.data?.orderId,
+  //     });
+
+  //     //receiver
+  //     postRobot.on("message", async (event) => {
+  //       console.log("consuming message from window  ....");
+  //       await new Promise((r) => setTimeout(r, 2000));
+  //       /*  setTransactionModal(true); */
+
+  //       if (event.data.message === "settled") {
+  //         /*  setTransactionMessage(`Fetching transaction status ...`); */
+  //         // setTimeout(() => {
+  //         axios
+  //           .get(
+  //             "https://dev-api.kado.money/v1/public/orders/6408fd3e24c501549aaac9fd"
+  //           )
+  //           .then(async (res) => {
+  //             if (res.status === 200) {
+  //               await new Promise((r) => setTimeout(r, 2000));
+  //               /*  setTransactionMessage(res.data.data.transferStatus); */
+  //             }
+  //           })
+  //           .catch((err) => console.log(err));
+  //         // })
+  //       } else console.log("failed");
+  //     });
+  //   } else return;
+  // };
 
   const handleAmountChange = (e) => {
     setAmountInUsd(e.target.value);
@@ -134,7 +149,8 @@ const GateWay = () => {
         <div className="displaymodalcontent">
           <Modal show={show} onClose={() => setShow(false)}>
             <iframe
-              src={`https://app.kado.money?onPayCurrency=USD&onRevCurrency=${selectedNetwork.symbol}&offPayCurrency=${selectedNetwork.symbol}&offRevCurrency=USD&onPayAmount=${amountInUsd}&offPayAmount=1&network=ETHEREUM`}
+            src={ `http://localhost:3003/ramp?onPayCurrency=USD&onRevCurrency=${selectedNetwork.symbol}&offPayCurrency=${selectedNetwork.symbol}&offRevCurrency=USD&onPayAmount=${amountInUsd}&offPayAmount=1&network=ETHEREUM`}
+              // src={`https://app.kado.money?onPayCurrency=USD&onRevCurrency=${selectedNetwork.symbol}&offPayCurrency=${selectedNetwork.symbol}&offRevCurrency=USD&onPayAmount=${amountInUsd}&offPayAmount=1&network=ETHEREUM`}
               style={{
                 overflow: "auto",
                 height: "100%",
