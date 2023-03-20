@@ -4,7 +4,6 @@ import TextInput from "../components/TextInput";
 import NetworkTab from "../ui/NetworkTab";
 import AssetTab from "../ui/AssetTab";
 import Modal from "../ui/Modal";
-import postRobot from "post-robot";
 import axios from "axios";
 
 const GateWay = () => {
@@ -17,15 +16,59 @@ const GateWay = () => {
   const [quote, setQuote] = useState("");
   const [loading, setLoading] = useState(false);
 
-   var listener = postRobot.on('getUser', function(event) {
-    console.log('logging to console...')
-});
+  const [statusModal, setStatusModal] = useState(false)
+  const [statusRes, setStatusRes] = useState("")
+  const [transactionMessage, setTransactionMessage] = useState("")
+  const [transactionModal, setTransactionModal] = useState(false)
 
-listener.cancel();
+  useEffect(() => {
+    const childResponse = async (e) => {
+      if(e?.data) {
+        console.log('e?.data', e?.data)
+        try {
+           const res = JSON.parse(e?.data)
+           console.log('data parsed successfully....');
+           //console.log(res?.__post_robot_10_0_46__?.map((el) => el.data))
+           const result = res?.__post_robot_10_0_46__[0]?.data;
+           const order_id = result.orderId
+           console.log('order_id', order_id)
+           if(order_id) {
+            setTransactionModal(true)
+            setTransactionMessage(`Fetching transaction status ...`)
+            await new Promise((r) => setTimeout(r, 2000))
 
-// postRobot.on("message", async (event) => {
-//         console.log("consuming message from window  ....");   
-//       });
+            axios.get(`https://dev-api.kado.money/v1/public/orders/${order_id}`)
+            .then( async (res) => {
+              if(res.status === 200) {
+                await new Promise((r) => setTimeout(r, 2000))
+                setStatusModal(true)
+                setTransactionModal(false)
+                // await new Promise((r) => setTimeout(r, 2000))
+                setStatusRes(res?.data?.data?.transferStatus)
+                setShow(false)
+              } else return
+            })
+            .catch(err => console.error(err))
+           } else return;
+        } catch (error) {
+          console.error('json parse error...');
+        }
+      }
+    };
+
+    console.log('log1');
+    window.addEventListener("message", childResponse);
+    console.log('log2');
+    return () => window.removeEventListener("message", childResponse)
+  })
+
+
+// postRobot.send(window.parent, 'message', {
+//             message: 'message',
+//             orderId: 'res?.data?.data?.orderId'
+//           })
+
+
 
 // postRobot.on('getUser', { domain: 'http://localhost' }, function(event) {
 
@@ -162,6 +205,26 @@ listener.cancel();
           </Modal>
         </div>
       )}
+      {
+        statusModal && (
+          <div className="displaymodalcontent">
+            <Modal show={statusModal} onClose={() => setStatusModal(false)}>
+              <p>
+                {statusRes}
+              </p>
+            </Modal>
+          </div>
+        )
+      }
+      {
+        transactionModal && (
+          <div className="displaymodalcontent">
+            <Modal show={transactionModal} onClose={() => setTransactionModal(false)}>
+              <p>{transactionMessage}</p>
+            </Modal>
+          </div>
+        )
+      }
     </>
   );
 };
