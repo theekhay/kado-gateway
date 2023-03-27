@@ -1,7 +1,25 @@
 import { MdArrowBackIosNew } from "react-icons/md";
-import { networks } from "./data";
+import axios from "axios";
+import { useState, useLayoutEffect } from "react";
 
 const NetworkTab = ({ networktab, setNetworkTab, setSelectedNetwork }) => {
+  const [blockchains, setBlockchains] = useState("");
+
+  useLayoutEffect(() => {
+    const blocks = async () => {
+      const res = await axios.get(
+        "https://dev-api.kado.money/v1/ramp/blockchains"
+      );
+      if (res.status === 200) {
+        setBlockchains(res?.data?.data?.blockchains);
+      } else {
+        console.log(res);
+        setBlockchains("No data");
+      }
+    };
+    blocks();
+  }, []);
+
   const handleNetworkSelect = (network) => {
     setSelectedNetwork(network);
     setNetworkTab(false);
@@ -19,21 +37,23 @@ const NetworkTab = ({ networktab, setNetworkTab, setSelectedNetwork }) => {
       </div>
       <p>Select the network you would like to send assets on.</p>
       <div className="networktab">
-        {networks.map((network, idx) => (
-          <div
-            className="networktab--grid"
-            key={idx}
-            onClick={() => handleNetworkSelect(network)}
-          >
-            <div className="networktab--grid--left">
-              <img src={network.icon} alt={network.name} />
-              {network.name}
+        {blockchains &&
+          blockchains.map((network, idx) => (
+            <div
+              className="networktab--grid"
+              key={idx}
+              onClick={() => handleNetworkSelect(network)}
+            >
+              <div className="networktab--grid--left">
+                {/*  <img src={network.icon} alt={network.name} /> */}
+                {network.network.charAt(0).toUpperCase() +
+                  network.network.slice(1).toLowerCase()}
+              </div>
+              <div className="networktab--grid--right">
+                <p>Time</p> <span>~{network.avgTransactionTimeSeconds}</span>
+              </div>
             </div>
-            <div className="networktab--grid--right">
-              <p>Time</p> <span>~{network.time}</span>
-            </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );
