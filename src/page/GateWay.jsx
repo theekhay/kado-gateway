@@ -5,6 +5,8 @@ import NetworkTab from "../ui/NetworkTab";
 import AssetTab from "../ui/AssetTab";
 import Modal from "../ui/Modal";
 import axios from "axios";
+import { FiCheckCircle } from "react-icons/fi"
+import Loading from "../components/Loading";
 
 const GateWay = () => {
   const [networktab, setNetworkTab] = useState(false);
@@ -26,13 +28,20 @@ const GateWay = () => {
       if(e?.data) {
         console.log('e?.data', e?.data)
         try {
-           const res = JSON.parse(e?.data)
-           console.log('data parsed successfully....');
-           //console.log(res?.__post_robot_10_0_46__?.map((el) => el.data))
-           const result = res?.__post_robot_10_0_46__[0]?.data;
-           const order_id = result.orderId
-           console.log('order_id', order_id)
+
+          console.log('e?.data?.payload', e?.data?.payload);
+           const res =  e?.data?.payload // JSON.parse(e?.data?.payload)
+
+          //  console.log('res: ', res);
+          
+          //  const result = res?.__post_robot_10_0_46__[0]?.data;
+           const order_id = res?.orderId // result.orderId
+         
            if(order_id) {
+
+            setShow(false);
+            await new Promise((r) => setTimeout(r, 1000))
+
             setTransactionModal(true)
             setTransactionMessage(`Fetching transaction status ...`)
             await new Promise((r) => setTimeout(r, 2000))
@@ -56,9 +65,8 @@ const GateWay = () => {
       }
     };
 
-    console.log('log1');
+    
     window.addEventListener("message", childResponse);
-    console.log('log2');
     return () => window.removeEventListener("message", childResponse)
   })
 
@@ -192,8 +200,7 @@ const GateWay = () => {
         <div className="displaymodalcontent">
           <Modal show={show} onClose={() => setShow(false)}>
             <iframe
-            src={ `http://localhost:3003/ramp?onPayCurrency=USD&onRevCurrency=${selectedNetwork.symbol}&offPayCurrency=${selectedNetwork.symbol}&offRevCurrency=USD&onPayAmount=${amountInUsd}&offPayAmount=1&network=ETHEREUM`}
-              // src={`https://app.kado.money?onPayCurrency=USD&onRevCurrency=${selectedNetwork.symbol}&offPayCurrency=${selectedNetwork.symbol}&offRevCurrency=USD&onPayAmount=${amountInUsd}&offPayAmount=1&network=ETHEREUM`}
+            src={ `http://localhost:3003/ramp?onPayCurrency=USD&onRevCurrency=${selectedNetwork.symbol}&offPayCurrency=${selectedNetwork.symbol}&offRevCurrency=USD&onPayAmount=${amountInUsd}&offPayAmount=1&network=ETHEREUM?isIntegratorMode=true`}
               style={{
                 overflow: "auto",
                 height: "100%",
@@ -208,10 +215,13 @@ const GateWay = () => {
       {
         statusModal && (
           <div className="displaymodalcontent">
-            <Modal show={statusModal} onClose={() => setStatusModal(false)}>
-              <p>
+            <Modal show={statusModal} onClose={() => setStatusModal(false)} className="dialogModal">
+             <div className="transactionstatus">
+              <FiCheckCircle size={50} color="green"/>
+               <p>
                 {statusRes}
               </p>
+             </div>
             </Modal>
           </div>
         )
@@ -219,8 +229,11 @@ const GateWay = () => {
       {
         transactionModal && (
           <div className="displaymodalcontent">
-            <Modal show={transactionModal} onClose={() => setTransactionModal(false)}>
-              <p>{transactionMessage}</p>
+            <Modal show={transactionModal} onClose={() => setTransactionModal(false)} className="dialogModal">
+              <div className="transactionconfirm">
+                <Loading />
+                <p>{transactionMessage}</p>
+              </div>
             </Modal>
           </div>
         )
