@@ -18,11 +18,17 @@ const GateWay = () => {
   const [show, setShow] = useState(false);
   const [quote, setQuote] = useState("");
   const [loading, setLoading] = useState(false);
-
   const [statusModal, setStatusModal] = useState(false);
   const [statusRes, setStatusRes] = useState("");
   const [transactionMessage, setTransactionMessage] = useState("");
   const [transactionModal, setTransactionModal] = useState(false);
+
+  const [networkAPIResponse, setNetworkAPIResponse] = useState("");
+  const [assetAPIResponse, setAssetAPIResponse] = useState("");
+  const [quoteAPIResponse, setQuoteAPIResponse] = useState("");
+
+  const NETWORK_API = "https://dev-api.kado.money/v1/ramp/supported-networks";
+  const ASSET_API = "https://dev-api.kado.money/v1/ramp/supported-assets";
 
   useEffect(() => {
     const childResponse = async (e) => {
@@ -128,14 +134,13 @@ const GateWay = () => {
     setLoading(true);
     axios
       .get(
-        `
-      https://dev-api.kado.money/v1/ramp/quote?amountUsd=${amountInUsd}&blockchain=ethereum&asset=ETH&transactionType=buy&partner=prime_trust&fiatMethod=card`
+        `https://dev-api.kado.money/v1/ramp/quote?amountUsd=${amountInUsd}&blockchain=ethereum&asset=ETH&transactionType=buy&partner=prime_trust&fiatMethod=card`
       )
-
       .then((res) => {
         setLoading(false);
         if (res.status === 200) {
           setQuote(res.data.data.quote.receiveUnitCountAfterFees);
+          setQuoteAPIResponse(res.data.data.quote);
         } else {
           setQuote("No quote available");
         }
@@ -188,6 +193,7 @@ const GateWay = () => {
             networktab={networktab}
             selectedNetwork={selectedNetwork}
             setSelectedNetwork={setSelectedNetwork}
+            setNetworkAPIResponse={setNetworkAPIResponse}
           />
         )}
         {assetTab && (
@@ -196,6 +202,7 @@ const GateWay = () => {
             assetTab={assetTab}
             selectedAsset={selectedAsset}
             setSelectedAsset={setSelectedAsset}
+            setAssetAPIResponse={setAssetAPIResponse}
           />
         )}
         {show && (
@@ -247,6 +254,9 @@ const GateWay = () => {
         <APIResponses
           selectedNetwork={selectedNetwork}
           selectedAsset={selectedAsset}
+          networkAPIResponse={networkAPIResponse}
+          assetAPIResponse={assetAPIResponse}
+          quoteAPIResponse={quoteAPIResponse}
         />
       </div>
     </div>

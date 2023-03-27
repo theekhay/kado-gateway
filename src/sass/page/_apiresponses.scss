@@ -1,4 +1,9 @@
 .apiresponses__container {
+  display: grid;
+  gap: 2em;
+  height: 100%;
+  max-height: 100vh;
+  overflow: scroll;
   .apiresponse__header {
     width: 100%;
     min-height: 58px;
@@ -12,4 +17,14 @@
       font-weight: 500;
     }
   }
+}
+
+.apiresponse-print {
+  margin-top: 1em;
+  font-size: 13px;
+  background-color: #0d1636;
+  color: #fff;
+  padding: 0.5em;
+  height: 40vh;
+  overflow-y: scroll;
 }

@@ -3,7 +3,12 @@ import { MdArrowBackIosNew } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
 import axios from "axios";
 
-const AssetTab = ({ assetTab, setAssetTab, setSelectedAsset }) => {
+const AssetTab = ({
+  assetTab,
+  setAssetTab,
+  setSelectedAsset,
+  setAssetAPIResponse,
+}) => {
   const [searchparam, setSearchParam] = useState("");
   const [assets, setAssets] = useState("");
 
@@ -20,6 +25,7 @@ const AssetTab = ({ assetTab, setAssetTab, setSelectedAsset }) => {
       );
       if (res.status === 200) {
         setAssets(res?.data?.data?.assets);
+        setAssetAPIResponse(res?.data?.data?.assets);
       } else {
         console.log(res);
         setAssets("No data");

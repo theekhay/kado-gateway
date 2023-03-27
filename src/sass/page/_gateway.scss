@@ -12,6 +12,11 @@
     padding: 2rem;
     display: grid;
     place-items: center;
+    height: 100%;
+    max-height: 100vh;
+    overflow: scroll;
+    margin-top: 2em;
+    scrollbar-width: none;
   }
 
   .gatewaylayout--right {

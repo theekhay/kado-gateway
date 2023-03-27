@@ -2,7 +2,12 @@ import { MdArrowBackIosNew } from "react-icons/md";
 import axios from "axios";
 import { useState, useLayoutEffect } from "react";
 
-const NetworkTab = ({ networktab, setNetworkTab, setSelectedNetwork }) => {
+const NetworkTab = ({
+  networktab,
+  setNetworkTab,
+  setSelectedNetwork,
+  setNetworkAPIResponse,
+}) => {
   const [blockchains, setBlockchains] = useState("");
 
   useLayoutEffect(() => {
@@ -12,6 +17,7 @@ const NetworkTab = ({ networktab, setNetworkTab, setSelectedNetwork }) => {
       );
       if (res.status === 200) {
         setBlockchains(res?.data?.data?.blockchains);
+        setNetworkAPIResponse(res?.data?.data?.blockchains);
       } else {
         console.log(res);
         setBlockchains("No data");
