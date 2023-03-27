@@ -4,8 +4,9 @@ import TextInput from "../components/TextInput";
 import NetworkTab from "../ui/NetworkTab";
 import AssetTab from "../ui/AssetTab";
 import Modal from "../ui/Modal";
-import postRobot from "post-robot";
 import axios from "axios";
+import { FiCheckCircle } from "react-icons/fi"
+import Loading from "../components/Loading";
 
 const GateWay = () => {
   const [networktab, setNetworkTab] = useState(false);
@@ -17,15 +18,65 @@ const GateWay = () => {
   const [quote, setQuote] = useState("");
   const [loading, setLoading] = useState(false);
 
-   var listener = postRobot.on('getUser', function(event) {
-    console.log('logging to console...')
-});
+  const [statusModal, setStatusModal] = useState(false)
+  const [statusRes, setStatusRes] = useState("")
+  const [transactionMessage, setTransactionMessage] = useState("")
+  const [transactionModal, setTransactionModal] = useState(false)
 
-listener.cancel();
+  useEffect(() => {
+    const childResponse = async (e) => {
+      if(e?.data) {
+        console.log('e?.data', e?.data)
+        try {
 
-// postRobot.on("message", async (event) => {
-//         console.log("consuming message from window  ....");   
-//       });
+          console.log('e?.data?.payload', e?.data?.payload);
+           const res =  e?.data?.payload // JSON.parse(e?.data?.payload)
+
+          //  console.log('res: ', res);
+          
+          //  const result = res?.__post_robot_10_0_46__[0]?.data;
+           const order_id = res?.orderId // result.orderId
+         
+           if(order_id) {
+
+            setShow(false);
+            await new Promise((r) => setTimeout(r, 1000))
+
+            setTransactionModal(true)
+            setTransactionMessage(`Fetching transaction status ...`)
+            await new Promise((r) => setTimeout(r, 2000))
+
+            axios.get(`https://dev-api.kado.money/v1/public/orders/${order_id}`)
+            .then( async (res) => {
+              if(res.status === 200) {
+                await new Promise((r) => setTimeout(r, 2000))
+                setStatusModal(true)
+                setTransactionModal(false)
+                // await new Promise((r) => setTimeout(r, 2000))
+                setStatusRes(res?.data?.data?.transferStatus)
+                setShow(false)
+              } else return
+            })
+            .catch(err => console.error(err))
+           } else return;
+        } catch (error) {
+          console.error('json parse error...');
+        }
+      }
+    };
+
+    
+    window.addEventListener("message", childResponse);
+    return () => window.removeEventListener("message", childResponse)
+  })
+
+
+// postRobot.send(window.parent, 'message', {
+//             message: 'message',
+//             orderId: 'res?.data?.data?.orderId'
+//           })
+
+
 
 // postRobot.on('getUser', { domain: 'http://localhost' }, function(event) {
 
@@ -149,8 +200,7 @@ listener.cancel();
         <div className="displaymodalcontent">
           <Modal show={show} onClose={() => setShow(false)}>
             <iframe
-            src={ `http://localhost:3003/ramp?onPayCurrency=USD&onRevCurrency=${selectedNetwork.symbol}&offPayCurrency=${selectedNetwork.symbol}&offRevCurrency=USD&onPayAmount=${amountInUsd}&offPayAmount=1&network=ETHEREUM`}
-              // src={`https://app.kado.money?onPayCurrency=USD&onRevCurrency=${selectedNetwork.symbol}&offPayCurrency=${selectedNetwork.symbol}&offRevCurrency=USD&onPayAmount=${amountInUsd}&offPayAmount=1&network=ETHEREUM`}
+            src={ `http://localhost:3003/ramp?onPayCurrency=USD&onRevCurrency=${selectedNetwork.symbol}&offPayCurrency=${selectedNetwork.symbol}&offRevCurrency=USD&onPayAmount=${amountInUsd}&offPayAmount=1&network=ETHEREUM?isIntegratorMode=true`}
               style={{
                 overflow: "auto",
                 height: "100%",
@@ -162,6 +212,32 @@ listener.cancel();
           </Modal>
         </div>
       )}
+      {
+        statusModal && (
+          <div className="displaymodalcontent">
+            <Modal show={statusModal} onClose={() => setStatusModal(false)} className="dialogModal">
+             <div className="transactionstatus">
+              <FiCheckCircle size={50} color="green"/>
+               <p>
+                {statusRes}
+              </p>
+             </div>
+            </Modal>
+          </div>
+        )
+      }
+      {
+        transactionModal && (
+          <div className="displaymodalcontent">
+            <Modal show={transactionModal} onClose={() => setTransactionModal(false)} className="dialogModal">
+              <div className="transactionconfirm">
+                <Loading />
+                <p>{transactionMessage}</p>
+              </div>
+            </Modal>
+          </div>
+        )
+      }
     </>
   );
 };

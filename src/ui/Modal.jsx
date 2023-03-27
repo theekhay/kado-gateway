@@ -1,6 +1,6 @@
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
-const Modal = ({ show, onClose, children }) => {
+const Modal = ({ show, onClose, children, className}) => {
   return (
     <div className="vnin--container">
       {show && (
@@ -12,7 +12,7 @@ const Modal = ({ show, onClose, children }) => {
               cursor="pointer"
             />
           </div>
-          <div className="vnincontent">{children}</div>
+          <div className={`vnincontent ${className}`}>{children}</div>
         </div>
       )}
     </div>
