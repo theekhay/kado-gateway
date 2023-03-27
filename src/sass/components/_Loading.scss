@@ -1,57 +1,56 @@
 .grid {
-    display: grid;
-    justify-items: center;
-    margin-top: 0.2rem;
+  display: grid;
+  justify-items: center;
+  margin-top: 0.2rem;
 }
 
 .circle {
-    width: 50px;
-    height: 50px;
-    border-radius: 100%;
-    grid-area: 1/1;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  grid-area: 1/1;
 }
 
 .green {
-    background-color: rgb(50, 205, 50, 0.7);
-    animation: move-right 2s linear infinite;
+  background-color: rgb(50, 205, 50, 0.7);
+  animation: move-right 2s linear infinite;
 }
 
 .orange {
-    background: rgb(255, 165, 0, 0.9);
-    animation: move-left 2s linear infinite ;
+  background: rgb(255, 165, 0, 0.9);
+  animation: move-left 2s linear infinite;
 }
 
 @keyframes move-right {
-    0%, 
-    100% {
-        margin-right: 0
-    }
+  0%,
+  100% {
+    margin-right: 0;
+  }
 
-    25% {
-        margin-right: 250px;
-    }
+  25% {
+    margin-right: 250px;
+  }
 
-    50% {
-        z-index: 2;  
-    }
+  50% {
+    z-index: 2;
+  }
 
-        75% {
-            margin-right: -250px;
-        }
+  75% {
+    margin-right: -250px;
+  }
 }
 
 @keyframes move-left {
+  0%,
+  100% {
+    margin-left: 0;
+  }
 
-    0%,
-    100% {
-        margin-left: 0
-    }
+  25% {
+    margin-left: 250px;
+  }
 
-    25% {
-        margin-left: 250px;
-    }
-
-    75% {
-        margin-left: -250px;
-    }
+  75% {
+    margin-left: -250px;
+  }
 }

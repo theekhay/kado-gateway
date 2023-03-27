@@ -5,8 +5,9 @@ import NetworkTab from "../ui/NetworkTab";
 import AssetTab from "../ui/AssetTab";
 import Modal from "../ui/Modal";
 import axios from "axios";
-import { FiCheckCircle } from "react-icons/fi"
+import { FiCheckCircle } from "react-icons/fi";
 import Loading from "../components/Loading";
+import APIResponses from "./APIResponses";
 
 const GateWay = () => {
   const [networktab, setNetworkTab] = useState(false);
@@ -17,71 +18,72 @@ const GateWay = () => {
   const [show, setShow] = useState(false);
   const [quote, setQuote] = useState("");
   const [loading, setLoading] = useState(false);
+  const [statusModal, setStatusModal] = useState(false);
+  const [statusRes, setStatusRes] = useState("");
+  const [transactionMessage, setTransactionMessage] = useState("");
+  const [transactionModal, setTransactionModal] = useState(false);
 
-  const [statusModal, setStatusModal] = useState(false)
-  const [statusRes, setStatusRes] = useState("")
-  const [transactionMessage, setTransactionMessage] = useState("")
-  const [transactionModal, setTransactionModal] = useState(false)
+  const [networkAPIResponse, setNetworkAPIResponse] = useState("");
+  const [assetAPIResponse, setAssetAPIResponse] = useState("");
+  const [quoteAPIResponse, setQuoteAPIResponse] = useState("");
+
+  const NETWORK_API = "https://dev-api.kado.money/v1/ramp/supported-networks";
+  const ASSET_API = "https://dev-api.kado.money/v1/ramp/supported-assets";
 
   useEffect(() => {
     const childResponse = async (e) => {
-      if(e?.data) {
-        console.log('e?.data', e?.data)
+      if (e?.data) {
+        /*   console.log("e?.data", e?.data); */
         try {
-
-          console.log('e?.data?.payload', e?.data?.payload);
-           const res =  e?.data?.payload // JSON.parse(e?.data?.payload)
+          /* console.log("e?.data?.payload", e?.data?.payload); */
+          const res = e?.data?.payload; // JSON.parse(e?.data?.payload)
 
           //  console.log('res: ', res);
-          
+
           //  const result = res?.__post_robot_10_0_46__[0]?.data;
-           const order_id = res?.orderId // result.orderId
-         
-           if(order_id) {
+          const order_id = res?.orderId; // result.orderId
 
+          if (order_id) {
             setShow(false);
-            await new Promise((r) => setTimeout(r, 1000))
+            await new Promise((r) => setTimeout(r, 1000));
 
-            setTransactionModal(true)
-            setTransactionMessage(`Fetching transaction status ...`)
-            await new Promise((r) => setTimeout(r, 2000))
+            setTransactionModal(true);
+            setTransactionMessage(`Fetching transaction status ...`);
+            await new Promise((r) => setTimeout(r, 2000));
 
-            axios.get(`https://dev-api.kado.money/v1/public/orders/${order_id}`)
-            .then( async (res) => {
-              if(res.status === 200) {
-                await new Promise((r) => setTimeout(r, 2000))
-                setStatusModal(true)
-                setTransactionModal(false)
-                // await new Promise((r) => setTimeout(r, 2000))
-                setStatusRes(res?.data?.data?.transferStatus)
-                setShow(false)
-              } else return
-            })
-            .catch(err => console.error(err))
-           } else return;
+            axios
+              .get(`https://dev-api.kado.money/v1/public/orders/${order_id}`)
+              .then(async (res) => {
+                if (res.status === 200) {
+                  await new Promise((r) => setTimeout(r, 2000));
+                  setStatusModal(true);
+                  setTransactionModal(false);
+                  // await new Promise((r) => setTimeout(r, 2000))
+                  setStatusRes(res?.data?.data?.transferStatus);
+                  setShow(false);
+                } else return;
+              })
+              .catch((err) => console.error(err));
+          } else return;
         } catch (error) {
-          console.error('json parse error...');
+          console.error("json parse error...");
         }
       }
     };
 
-    
     window.addEventListener("message", childResponse);
-    return () => window.removeEventListener("message", childResponse)
-  })
+    return () => window.removeEventListener("message", childResponse);
+  });
 
+  // postRobot.send(window.parent, 'message', {
+  //             message: 'message',
+  //             orderId: 'res?.data?.data?.orderId'
+  //           })
 
-// postRobot.send(window.parent, 'message', {
-//             message: 'message',
-//             orderId: 'res?.data?.data?.orderId'
-//           })
+  // postRobot.on('getUser', { domain: 'http://localhost' }, function(event) {
 
-
-
-// postRobot.on('getUser', { domain: 'http://localhost' }, function(event) {
-
-//     console.log("consuming message from window  ....");   
-// });
+  //     console.log("consuming message from window  ....");
+  // });
 
   // const getStatusResponse = async () => {
   //   const res = await axios.get(
@@ -132,14 +134,13 @@ const GateWay = () => {
     setLoading(true);
     axios
       .get(
-        `
-      https://dev-api.kado.money/v1/ramp/quote?amountUsd=${amountInUsd}&blockchain=ethereum&asset=ETH&transactionType=buy&partner=prime_trust&fiatMethod=card`
+        `https://dev-api.kado.money/v1/ramp/quote?amountUsd=${amountInUsd}&blockchain=ethereum&asset=ETH&transactionType=buy&partner=prime_trust&fiatMethod=card`
       )
-
       .then((res) => {
         setLoading(false);
         if (res.status === 200) {
           setQuote(res.data.data.quote.receiveUnitCountAfterFees);
+          setQuoteAPIResponse(res.data.data.quote);
         } else {
           setQuote("No quote available");
         }
@@ -148,97 +149,117 @@ const GateWay = () => {
   }, [amountInUsd]);
 
   return (
-    <>
-      {!networktab && !assetTab && (
-        <div className="gateway__container">
-          <div className="gateway__form">
-            <TextInput
-              placeholder="Network"
-              type="text"
-              disabled={true}
-              onSelectClick={() => setNetworkTab(true)}
-              defaultValue={selectedNetwork.name}
-              iconUrl={selectedNetwork.icon}
-              prefix="Network"
-            />
-            <TextInput
-              placeholder="Asset"
-              type="text"
-              disabled={true}
-              onSelectClick={() => setAssetTab(true)}
-              defaultValue={selectedAsset.symbol}
-              iconUrl={selectedAsset.icon}
-              prefix="Asset"
-            />
-            <TextInput
-              placeholder="Amount in USD"
-              type="number"
-              onChange={handleAmountChange}
-            />
-            {loading ? <p>Fetching quotes...</p> : <p>{quote}</p>}
-            <Button buttonText="Ramp" onClick={() => setShow(true)} />
+    <div className="gatewaylayout">
+      <div className="gatewaylayout--left">
+        {!networktab && !assetTab && (
+          <div className="gateway__container">
+            <div className="gateway__form">
+              <TextInput
+                placeholder="Network"
+                type="text"
+                disabled={true}
+                onSelectClick={() => setNetworkTab(true)}
+                defaultValue={
+                  selectedNetwork.network
+                    ? selectedNetwork.network.charAt(0).toUpperCase() +
+                      selectedNetwork.network.slice(1).toLowerCase()
+                    : selectedNetwork.network
+                }
+                iconUrl={selectedNetwork.icon}
+                prefix="Network"
+              />
+              <TextInput
+                placeholder="Asset"
+                type="text"
+                disabled={true}
+                onSelectClick={() => setAssetTab(true)}
+                defaultValue={selectedAsset.name}
+                iconUrl={selectedAsset.icon}
+                prefix="Asset"
+              />
+              <TextInput
+                placeholder="Amount in USD"
+                type="number"
+                onChange={handleAmountChange}
+              />
+              {loading ? <p>Fetching quotes...</p> : <p>{quote}</p>}
+              <Button buttonText="Ramp" onClick={() => setShow(true)} />
+            </div>
           </div>
-        </div>
-      )}
-      {networktab && (
-        <NetworkTab
-          setNetworkTab={setNetworkTab}
-          networktab={networktab}
-          selectedNetwork={selectedNetwork}
-          setSelectedNetwork={setSelectedNetwork}
-        />
-      )}
-      {assetTab && (
-        <AssetTab
-          setAssetTab={setAssetTab}
-          assetTab={assetTab}
-          selectedAsset={selectedAsset}
-          setSelectedAsset={setSelectedAsset}
-        />
-      )}
-      {show && (
-        <div className="displaymodalcontent">
-          <Modal show={show} onClose={() => setShow(false)}>
-            <iframe
-            src={ `http://localhost:3003/ramp?onPayCurrency=USD&onRevCurrency=${selectedNetwork.symbol}&offPayCurrency=${selectedNetwork.symbol}&offRevCurrency=USD&onPayAmount=${amountInUsd}&offPayAmount=1&network=ETHEREUM?isIntegratorMode=true`}
-              style={{
-                overflow: "auto",
-                height: "100%",
-                width: "100%",
-                border: "none",
-              }}
-              title="Kado"
-            />
-          </Modal>
-        </div>
-      )}
-      {
-        statusModal && (
+        )}
+        {networktab && (
+          <NetworkTab
+            setNetworkTab={setNetworkTab}
+            networktab={networktab}
+            selectedNetwork={selectedNetwork}
+            setSelectedNetwork={setSelectedNetwork}
+            setNetworkAPIResponse={setNetworkAPIResponse}
+          />
+        )}
+        {assetTab && (
+          <AssetTab
+            setAssetTab={setAssetTab}
+            assetTab={assetTab}
+            selectedAsset={selectedAsset}
+            setSelectedAsset={setSelectedAsset}
+            setAssetAPIResponse={setAssetAPIResponse}
+          />
+        )}
+        {show && (
           <div className="displaymodalcontent">
-            <Modal show={statusModal} onClose={() => setStatusModal(false)} className="dialogModal">
-             <div className="transactionstatus">
-              <FiCheckCircle size={50} color="green"/>
-               <p>
-                {statusRes}
-              </p>
-             </div>
+            <Modal show={show} onClose={() => setShow(false)}>
+              <iframe
+                src={`http://localhost:3003/ramp?onPayCurrency=USD&onRevCurrency=${selectedNetwork.symbol}&offPayCurrency=${selectedNetwork.symbol}&offRevCurrency=USD&onPayAmount=${amountInUsd}&offPayAmount=1&network=ETHEREUM?isIntegratorMode=true`}
+                style={{
+                  overflow: "auto",
+                  height: "100%",
+                  width: "100%",
+                  border: "none",
+                }}
+                title="Kado"
+              />
             </Modal>
           </div>
-        )
-      }
-      {
-        transactionModal && (
+        )}
+        {statusModal && (
           <div className="displaymodalcontent">
-            <Modal show={transactionModal} onClose={() => setTransactionModal(false)} className="dialogModal">
+            <Modal
+              show={statusModal}
+              onClose={() => setStatusModal(false)}
+              className="dialogModal"
+            >
+              <div className="transactionstatus">
+                <FiCheckCircle size={50} color="green" />
+                <p>{statusRes}</p>
+              </div>
+            </Modal>
+          </div>
+        )}
+        {transactionModal && (
+          <div className="displaymodalcontent">
+            <Modal
+              show={transactionModal}
+              onClose={() => setTransactionModal(false)}
+              className="dialogModal"
+            >
               <div className="transactionconfirm">
                 <Loading />
                 <p>{transactionMessage}</p>
               </div>
             </Modal>
           </div>
-        )
-      }
-    </>
+        )}
+      </div>
+      <div className="gatewaylayout--right">
+        <APIResponses
+          selectedNetwork={selectedNetwork}
+          selectedAsset={selectedAsset}
+          networkAPIResponse={networkAPIResponse}
+          assetAPIResponse={assetAPIResponse}
+          quoteAPIResponse={quoteAPIResponse}
+        />
+      </div>
+    </div>
   );
 };
 
