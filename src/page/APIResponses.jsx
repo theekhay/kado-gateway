@@ -3,14 +3,12 @@ import GetApiContext from "../context/get-api-calls/GetApiContext";
 
 const APIResponses = () => {
   const { params } = useContext(GetApiContext);
-
-  console.log(params.blockchains);
   return (
     <div className="apiresponses__container">
       <div className="apiresponse__header">
         <h4>Network Responses</h4>
       </div>
-      {params && (
+      {Object.keys(params).length !== 0 && (
         <div className="apiresponse-data">
           <div className="apiresponse__header">
             <h4>
