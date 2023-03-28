@@ -17,10 +17,16 @@ const NetworkTab = ({ networktab, setNetworkTab, setSelectedNetwork }) => {
         getParams({
           blockchains: res?.data?.data?.blockchains,
           api: "https://dev-api.kado.money/v1/ramp/blockchains",
+          status: res.status,
         });
       } else {
         console.log(res);
         setBlockchains("No data");
+        getParams({
+          blockchains: "No data",
+          api: "https://dev-api.kado.money/v1/ramp/blockchains",
+          status: res.status,
+        });
       }
     };
     blocks();

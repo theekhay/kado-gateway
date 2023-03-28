@@ -31,72 +31,24 @@ const APIResponses = () => {
                 {params.api}
               </span>
             </h4>
+            <h5>
+              API STATUS :{" "}
+              {params.status === 200 ? (
+                <span style={{ color: "green", fontWeight: "bolder" }}>
+                  {params.status} (OK)
+                </span>
+              ) : (
+                <span style={{ color: "red", fontWeight: "bolder" }}>
+                  {params.status} (ERROR)
+                </span>
+              )}
+            </h5>
           </div>
           <div className="apiresponse-print">
             <pre>{JSON.stringify(params.blockchains, null, 2)}</pre>
           </div>
         </div>
       )}
-      {/*  {quoteAPIResponse && (
-        <div className="apiresponse-data">
-          <div className="apiresponse__header">
-            <h4>Quote Response</h4>
-          </div>
-          <div className="apiresponse-print">
-            <pre>{JSON.stringify(quoteAPIResponse, null, 2)}</pre>
-          </div>
-        </div>
-      )} */}
-      {/* {quoteAPIResponse && (
-        <div className="apiresponse-data">
-          <div className="apiresponse__header">
-            <h4>Quote Response</h4>
-          </div>
-          <div className="apiresponse-print">
-            <pre>{JSON.stringify(quoteAPIResponse, null, 2)}</pre>
-          </div>
-        </div>
-      )}
-      {selectedNetwork && (
-        <div className="apiresponse-data">
-          <div className="apiresponse__header">
-            <h4>Selected Network</h4>
-          </div>
-          <div className="apiresponse-print">
-            <pre>{JSON.stringify(selectedNetwork, null, 2)}</pre>
-          </div>
-        </div>
-      )}
-      <div className="apiresponse-data">
-        <div className="apiresponse__header">
-          <h4>Network Responses</h4>
-        </div>
-        {networkAPIResponse && (
-          <div className="apiresponse-print">
-            <pre>{JSON.stringify(networkAPIResponse, null, 2)}</pre>
-          </div>
-        )}
-      </div>
-      {selectedAsset && (
-        <div className="apiresponse-data">
-          <div className="apiresponse__header">
-            <h4>Selected Asset</h4>
-          </div>
-          <div className="apiresponse-print">
-            <pre>{JSON.stringify(selectedAsset, null, 2)}</pre>
-          </div>
-        </div>
-      )}
-      <div className="apiresponse-data">
-        <div className="apiresponse__header">
-          <h4>Assets Responses</h4>
-        </div>
-        {assetAPIResponse && (
-          <div className="apiresponse-print">
-            <pre>{JSON.stringify(assetAPIResponse, null, 2)}</pre>
-          </div>
-        )}
-      </div> */}
     </div>
   );
 };

@@ -25,10 +25,16 @@ const AssetTab = ({ assetTab, setAssetTab, setSelectedAsset }) => {
         getParams({
           blockchains: res?.data?.data?.assets,
           api: "https://dev-api.kado.money/v1/ramp/supported-assets",
+          status: res.status,
         });
       } else {
         console.log(res);
         setAssets("No data");
+        getParams({
+          blockchains: "No data",
+          api: "https://dev-api.kado.money/v1/ramp/supported-assets",
+          status: res.status,
+        });
       }
     };
 

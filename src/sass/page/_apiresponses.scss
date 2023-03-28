@@ -13,6 +13,9 @@
     //#222634
     color: #ffffff;
     padding: 1.5em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
 
     h4 {
       font-weight: 500;
