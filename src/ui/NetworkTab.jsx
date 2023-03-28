@@ -2,10 +2,12 @@ import { MdArrowBackIosNew } from "react-icons/md";
 import axios from "axios";
 import { useState, useLayoutEffect, useContext } from "react";
 import GetApiContext from "../context/get-api-calls/GetApiContext";
+import Spinner from "../components/Spinner";
 
 const NetworkTab = ({ networktab, setNetworkTab, setSelectedNetwork }) => {
   const [blockchains, setBlockchains] = useState("");
   const { getParams } = useContext(GetApiContext);
+  const [loading, setLoading] = useState(true);
 
   useLayoutEffect(() => {
     const blocks = async () => {
@@ -13,6 +15,7 @@ const NetworkTab = ({ networktab, setNetworkTab, setSelectedNetwork }) => {
         "https://dev-api.kado.money/v1/ramp/blockchains"
       );
       if (res.status === 200) {
+        setLoading(false);
         setBlockchains(res?.data?.data?.blockchains);
         getParams({
           blockchains: res?.data?.data?.blockchains,
@@ -20,7 +23,7 @@ const NetworkTab = ({ networktab, setNetworkTab, setSelectedNetwork }) => {
           status: res.status,
         });
       } else {
-        console.log(res);
+        setLoading(false);
         setBlockchains("No data");
         getParams({
           blockchains: "No data",
@@ -48,25 +51,32 @@ const NetworkTab = ({ networktab, setNetworkTab, setSelectedNetwork }) => {
         <h3>Selected USDC</h3>
       </div>
       <p>Select the network you would like to send assets on.</p>
-      <div className="networktab">
-        {blockchains &&
-          blockchains.map((network, idx) => (
-            <div
-              className="networktab--grid"
-              key={idx}
-              onClick={() => handleNetworkSelect(network)}
-            >
-              <div className="networktab--grid--left">
-                {/*  <img src={network.icon} alt={network.name} /> */}
-                {network.network.charAt(0).toUpperCase() +
-                  network.network.slice(1).toLowerCase()}
+      {loading && (
+        <div className="networktab--spinner">
+          <Spinner />
+        </div>
+      )}
+      {!loading && (
+        <div className="networktab">
+          {blockchains &&
+            blockchains.map((network, idx) => (
+              <div
+                className="networktab--grid"
+                key={idx}
+                onClick={() => handleNetworkSelect(network)}
+              >
+                <div className="networktab--grid--left">
+                  {/*  <img src={network.icon} alt={network.name} /> */}
+                  {network.network.charAt(0).toUpperCase() +
+                    network.network.slice(1).toLowerCase()}
+                </div>
+                <div className="networktab--grid--right">
+                  <p>Time</p> <span>~{network.avgTransactionTimeSeconds}</span>
+                </div>
               </div>
-              <div className="networktab--grid--right">
-                <p>Time</p> <span>~{network.avgTransactionTimeSeconds}</span>
-              </div>
-            </div>
-          ))}
-      </div>
+            ))}
+        </div>
+      )}
     </div>
   );
 };
