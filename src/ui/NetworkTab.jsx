@@ -1,14 +1,11 @@
 import { MdArrowBackIosNew } from "react-icons/md";
 import axios from "axios";
-import { useState, useLayoutEffect } from "react";
+import { useState, useLayoutEffect, useContext } from "react";
+import GetApiContext from "../context/get-api-calls/GetApiContext";
 
-const NetworkTab = ({
-  networktab,
-  setNetworkTab,
-  setSelectedNetwork,
-  setNetworkAPIResponse,
-}) => {
+const NetworkTab = ({ networktab, setNetworkTab, setSelectedNetwork }) => {
   const [blockchains, setBlockchains] = useState("");
+  const { getParams } = useContext(GetApiContext);
 
   useLayoutEffect(() => {
     const blocks = async () => {
@@ -17,7 +14,10 @@ const NetworkTab = ({
       );
       if (res.status === 200) {
         setBlockchains(res?.data?.data?.blockchains);
-        setNetworkAPIResponse(res?.data?.data?.blockchains);
+        getParams({
+          blockchains: res?.data?.data?.blockchains,
+          api: "https://dev-api.kado.money/v1/ramp/blockchains",
+        });
       } else {
         console.log(res);
         setBlockchains("No data");

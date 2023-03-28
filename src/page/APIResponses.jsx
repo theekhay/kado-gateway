@@ -1,16 +1,53 @@
-const APIResponses = ({
-  selectedNetwork,
-  selectedAsset,
-  networkAPIResponse,
-  assetAPIResponse,
-  quoteAPIResponse,
-}) => {
+import { useContext } from "react";
+import GetApiContext from "../context/get-api-calls/GetApiContext";
+
+const APIResponses = () => {
+  const { params } = useContext(GetApiContext);
+
+  console.log(params.blockchains);
   return (
     <div className="apiresponses__container">
       <div className="apiresponse__header">
-        <h4>Fetching All Responses</h4>
+        <h4>Network Responses</h4>
       </div>
-      {quoteAPIResponse && (
+      {params && (
+        <div className="apiresponse-data">
+          <div className="apiresponse__header">
+            <h4>
+              <span
+                style={{
+                  fontWeight: "800",
+                }}
+              >
+                API CALL :{" "}
+              </span>
+              <span
+                style={{
+                  fontWeight: "400",
+                  fontSize: "14px",
+                  color: "green",
+                }}
+              >
+                {params.api}
+              </span>
+            </h4>
+          </div>
+          <div className="apiresponse-print">
+            <pre>{JSON.stringify(params.blockchains, null, 2)}</pre>
+          </div>
+        </div>
+      )}
+      {/*  {quoteAPIResponse && (
+        <div className="apiresponse-data">
+          <div className="apiresponse__header">
+            <h4>Quote Response</h4>
+          </div>
+          <div className="apiresponse-print">
+            <pre>{JSON.stringify(quoteAPIResponse, null, 2)}</pre>
+          </div>
+        </div>
+      )} */}
+      {/* {quoteAPIResponse && (
         <div className="apiresponse-data">
           <div className="apiresponse__header">
             <h4>Quote Response</h4>
@@ -59,7 +96,7 @@ const APIResponses = ({
             <pre>{JSON.stringify(assetAPIResponse, null, 2)}</pre>
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

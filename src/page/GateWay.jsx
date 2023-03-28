@@ -256,8 +256,6 @@ const GateWay = () => {
       </div>
       <div className="gatewaylayout--right">
         <APIResponses
-          selectedNetwork={selectedNetwork}
-          selectedAsset={selectedAsset}
           networkAPIResponse={networkAPIResponse}
           assetAPIResponse={assetAPIResponse}
           quoteAPIResponse={quoteAPIResponse}

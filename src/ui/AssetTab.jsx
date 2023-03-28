@@ -1,16 +1,13 @@
-import { useState, useLayoutEffect } from "react";
+import { useState, useLayoutEffect, useContext } from "react";
 import { MdArrowBackIosNew } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
 import axios from "axios";
+import GetApiContext from "../context/get-api-calls/GetApiContext";
 
-const AssetTab = ({
-  assetTab,
-  setAssetTab,
-  setSelectedAsset,
-  setAssetAPIResponse,
-}) => {
+const AssetTab = ({ assetTab, setAssetTab, setSelectedAsset }) => {
   const [searchparam, setSearchParam] = useState("");
   const [assets, setAssets] = useState("");
+  const { getParams } = useContext(GetApiContext);
 
   const filteredAssets =
     assets &&
@@ -25,7 +22,10 @@ const AssetTab = ({
       );
       if (res.status === 200) {
         setAssets(res?.data?.data?.assets);
-        setAssetAPIResponse(res?.data?.data?.assets);
+        getParams({
+          blockchains: res?.data?.data?.assets,
+          api: "https://dev-api.kado.money/v1/ramp/supported-assets",
+        });
       } else {
         console.log(res);
         setAssets("No data");

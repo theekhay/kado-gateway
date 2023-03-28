@@ -8,7 +8,7 @@
   .apiresponse__header {
     width: 100%;
     min-height: 58px;
-    background: #1a66f3;
+    background-color: rgba(0, 0, 0, 0.5);
     box-shadow: 0px 3px 20px rgba(0, 0, 0, 0.043);
     //#222634
     color: #ffffff;
@@ -23,8 +23,8 @@
 .apiresponse-print {
   margin-top: 1em;
   font-size: 13px;
-  background-color: #0d1636;
-  color: #acbeaf;
+  background: rgba(42, 49, 61);
+  color: #fefefe;
   padding: 0.5em;
   height: 40vh;
   overflow-y: scroll;
