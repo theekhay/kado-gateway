@@ -52,7 +52,7 @@ const AssetTab = ({
       </div>
       <div className="searchinput">
         <input type="text" onChange={(e) => setSearchParam(e.target.value)} />
-        <CiSearch size={20} />
+        <CiSearch size={20} color="white" />
       </div>
       <div className="networktab">
         {filteredAssets &&

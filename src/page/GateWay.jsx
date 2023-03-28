@@ -182,7 +182,11 @@ const GateWay = () => {
                 type="number"
                 onChange={handleAmountChange}
               />
-              {loading ? <p>Fetching quotes...</p> : <p>{quote}</p>}
+              {loading ? (
+                <p style={{ color: "#fff" }}>Fetching quotes...</p>
+              ) : (
+                <p style={{ color: "#fff" }}>{quote}</p>
+              )}
               <Button buttonText="Ramp" onClick={() => setShow(true)} />
             </div>
           </div>
