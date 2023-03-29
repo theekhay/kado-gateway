@@ -2,6 +2,7 @@ import { useReducer } from "react";
 import GetApiContext from "./GetApiContext";
 import GetApiReducer from "./GetApiReducer";
 import { GET_PARAMS, URL_BUILDER } from "../types";
+import { BASE_URL } from "../../utils/baseUrl";
 
 const GetApiState = ({ children }) => {
   const initialState = {
@@ -21,7 +22,7 @@ const GetApiState = ({ children }) => {
   const urlBuilder = (currency, amount) => {
     dispatch({
       type: URL_BUILDER,
-      payload: `http://localhost:3003/ramp?onPayCurrency=USD&onRevCurrency=${currency}&offPayCurrency=${currency}&offRevCurrency=USD&onPayAmount=${amount}&offPayAmount=1&network=ETHEREUM?isIntegratorMode=true`,
+      payload: `${BASE_URL}?onPayCurrency=USD&onRevCurrency=${currency}&offPayCurrency=${currency}&offRevCurrency=USD&onPayAmount=${amount}&offPayAmount=1&network=ETHEREUM?isIntegratorMode=true`,
     });
   };
 

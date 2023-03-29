@@ -3,8 +3,6 @@ import GetApiContext from "../context/get-api-calls/GetApiContext";
 
 const APIResponses = () => {
   const { params, url } = useContext(GetApiContext);
-
-  console.log(url);
   return (
     <div className="apiresponses__container">
       <div className="apiresponse__header">
