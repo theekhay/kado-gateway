@@ -2,7 +2,9 @@ import { useContext } from "react";
 import GetApiContext from "../context/get-api-calls/GetApiContext";
 
 const APIResponses = () => {
-  const { params } = useContext(GetApiContext);
+  const { params, url } = useContext(GetApiContext);
+
+  console.log(url);
   return (
     <div className="apiresponses__container">
       <div className="apiresponse__header">
@@ -44,6 +46,31 @@ const APIResponses = () => {
           </div>
           <div className="apiresponse-print">
             <pre>{JSON.stringify(params.blockchains, null, 2)}</pre>
+          </div>
+        </div>
+      )}
+      {url && (
+        <div className="apiresponse-data">
+          <div className="apiresponse__header">
+            <h4>
+              <span
+                style={{
+                  fontWeight: "800",
+                }}
+              >
+                URL BUILDER :{" "}
+              </span>
+              <span
+                style={{
+                  fontWeight: "400",
+                  fontSize: "14px",
+                  color: "green",
+                  wordBreak: "break-all",
+                }}
+              >
+                {url}
+              </span>
+            </h4>
           </div>
         </div>
       )}

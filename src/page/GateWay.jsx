@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Button from "../components/Button";
 import TextInput from "../components/TextInput";
 import NetworkTab from "../ui/NetworkTab";
@@ -8,6 +8,7 @@ import axios from "axios";
 import { FiCheckCircle } from "react-icons/fi";
 import Loading from "../components/Loading";
 import APIResponses from "./APIResponses";
+import GetApiContext from "../context/get-api-calls/GetApiContext";
 
 const GateWay = () => {
   const [networktab, setNetworkTab] = useState(false);
@@ -26,6 +27,8 @@ const GateWay = () => {
   const [networkAPIResponse, setNetworkAPIResponse] = useState("");
   const [assetAPIResponse, setAssetAPIResponse] = useState("");
   const [quoteAPIResponse, setQuoteAPIResponse] = useState("");
+
+  const { urlBuilder } = useContext(GetApiContext);
 
   useEffect(() => {
     const childResponse = async (e) => {
@@ -145,6 +148,13 @@ const GateWay = () => {
       .catch((err) => setLoading(false));
   }, [amountInUsd]);
 
+  useEffect(() => {
+    if (selectedNetwork && amountInUsd) {
+      urlBuilder(selectedNetwork.network, amountInUsd);
+    } else return;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedNetwork, amountInUsd]);
+
   return (
     <div className="gatewaylayout">
       <div className="gatewaylayout--left">
@@ -210,7 +220,7 @@ const GateWay = () => {
           <div className="displaymodalcontent">
             <Modal show={show} onClose={() => setShow(false)}>
               <iframe
-                src={`http://localhost:3003/ramp?onPayCurrency=USD&onRevCurrency=${selectedNetwork.symbol}&offPayCurrency=${selectedNetwork.symbol}&offRevCurrency=USD&onPayAmount=${amountInUsd}&offPayAmount=1&network=ETHEREUM?isIntegratorMode=true`}
+                src={`http://localhost:3003/ramp?onPayCurrency=USD&onRevCurrency=${selectedNetwork.network}&offPayCurrency=${selectedNetwork.network}&offRevCurrency=USD&onPayAmount=${amountInUsd}&offPayAmount=1&network=ETHEREUM?isIntegratorMode=true`}
                 style={{
                   overflow: "auto",
                   height: "100%",

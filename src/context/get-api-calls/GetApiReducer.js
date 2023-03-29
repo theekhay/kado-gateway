@@ -1,4 +1,4 @@
-import { GET_PARAMS } from "../types";
+import { GET_PARAMS, URL_BUILDER } from "../types";
 
 const GetApiReducer = (prevState, { type, payload }) => {
   switch (type) {
@@ -6,6 +6,11 @@ const GetApiReducer = (prevState, { type, payload }) => {
       return {
         ...prevState,
         params: payload,
+      };
+    case URL_BUILDER:
+      return {
+        ...prevState,
+        url: payload,
       };
     default:
       return prevState;

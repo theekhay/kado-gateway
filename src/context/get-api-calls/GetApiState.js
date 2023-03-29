@@ -1,11 +1,12 @@
 import { useReducer } from "react";
 import GetApiContext from "./GetApiContext";
 import GetApiReducer from "./GetApiReducer";
-import { GET_PARAMS } from "../types";
+import { GET_PARAMS, URL_BUILDER } from "../types";
 
 const GetApiState = ({ children }) => {
   const initialState = {
     params: {},
+    url: "",
   };
 
   const [state, dispatch] = useReducer(GetApiReducer, initialState);
@@ -17,11 +18,20 @@ const GetApiState = ({ children }) => {
     });
   };
 
+  const urlBuilder = (currency, amount) => {
+    dispatch({
+      type: URL_BUILDER,
+      payload: `http://localhost:3003/ramp?onPayCurrency=USD&onRevCurrency=${currency}&offPayCurrency=${currency}&offRevCurrency=USD&onPayAmount=${amount}&offPayAmount=1&network=ETHEREUM?isIntegratorMode=true`,
+    });
+  };
+
   return (
     <GetApiContext.Provider
       value={{
         params: state.params,
+        url: state.url,
         getParams,
+        urlBuilder,
       }}
     >
       {children}
