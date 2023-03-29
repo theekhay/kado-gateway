@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect } from "react";
 import Button from "../components/Button";
 import TextInput from "../components/TextInput";
 import NetworkTab from "../ui/NetworkTab";
@@ -26,9 +26,6 @@ const GateWay = () => {
   const [networkAPIResponse, setNetworkAPIResponse] = useState("");
   const [assetAPIResponse, setAssetAPIResponse] = useState("");
   const [quoteAPIResponse, setQuoteAPIResponse] = useState("");
-
-  const NETWORK_API = "https://dev-api.kado.money/v1/ramp/supported-networks";
-  const ASSET_API = "https://dev-api.kado.money/v1/ramp/supported-assets";
 
   useEffect(() => {
     const childResponse = async (e) => {
