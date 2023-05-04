@@ -1,4 +1,4 @@
-import { GET_PARAMS, URL_BUILDER } from "../types";
+import { GET_PARAMS, URL_BUILDER, GET_QUOTES } from "../types";
 
 const GetApiReducer = (prevState, { type, payload }) => {
   switch (type) {
@@ -11,6 +11,11 @@ const GetApiReducer = (prevState, { type, payload }) => {
       return {
         ...prevState,
         url: payload,
+      };
+    case GET_QUOTES:
+      return {
+        ...prevState,
+        quotes: payload,
       };
     default:
       return prevState;

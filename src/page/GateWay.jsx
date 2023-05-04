@@ -28,7 +28,7 @@ const GateWay = () => {
   const [assetAPIResponse, setAssetAPIResponse] = useState("");
   const [quoteAPIResponse, setQuoteAPIResponse] = useState("");
 
-  const { urlBuilder } = useContext(GetApiContext);
+  const { urlBuilder, getQuotes, getParams } = useContext(GetApiContext);
 
   useEffect(() => {
     const childResponse = async (e) => {
@@ -132,15 +132,20 @@ const GateWay = () => {
 
   useEffect(() => {
     setLoading(true);
+    const url = `https://dev-api.kado.money/v1/ramp/quote?amountUsd=${amountInUsd}&blockchain=ethereum&asset=ETH&transactionType=buy&partner=prime_trust&fiatMethod=card`;
     axios
-      .get(
-        `https://dev-api.kado.money/v1/ramp/quote?amountUsd=${amountInUsd}&blockchain=ethereum&asset=ETH&transactionType=buy&partner=prime_trust&fiatMethod=card`
-      )
+      .get(url)
       .then((res) => {
         setLoading(false);
         if (res.status === 200) {
           setQuote(res.data.data.quote.receiveUnitCountAfterFees);
           setQuoteAPIResponse(res.data.data.quote);
+          getQuotes(res.data.data.quote);
+          getParams({
+            blockchains: res.data.data.quote,
+            api: url,
+            status: res.status,
+          });
         } else {
           setQuote("No quote available");
         }
