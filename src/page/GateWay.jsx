@@ -251,7 +251,7 @@ const GateWay = () => {
             <Modal show={show} onClose={() => setShow(false)}>
               <iframe
                 //src={`http://localhost:3003/ramp?onPayCurrency=USD&onRevCurrency=${selectedNetwork.network}&offPayCurrency=${selectedNetwork.network}&offRevCurrency=USD&onPayAmount=${amountInUsd}&offPayAmount=1&network=ETHEREUM?isIntegratorMode=true`}
-                src={`${BASE_URL}?product=BUY&network=optimism&step=summary&onToAddress=${address}&onPayAmount=${amountInUsd}&cryptoList=USDC&fiatList=USD,CAD,GBP,EUR,MXN,COP&productList=BUY&onPayCurrency=${selectedNetwork.network}&onRevCurrency=${selectedNetwork.network}&email=${email}&mode=${transactionType}`}
+                src={`${BASE_URL}?product=BUY&network=optimism&step=summary&onToAddress=${address}&onPayAmount=${amountInUsd}&cryptoList=USDC&fiatList=USD,CAD,GBP,EUR,MXN,COP&productList=BUY&onPayCurrency=USD&onRevCurrency=${selectedNetwork.network}&email=${email}&mode=${transactionType}`}
                 style={{
                   overflow: "auto",
                   height: "100%",
