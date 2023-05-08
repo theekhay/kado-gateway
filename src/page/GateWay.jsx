@@ -9,6 +9,7 @@ import { FiCheckCircle } from "react-icons/fi";
 import Loading from "../components/Loading";
 import APIResponses from "./APIResponses";
 import GetApiContext from "../context/get-api-calls/GetApiContext";
+import { BASE_URL } from "../utils/baseUrl";
 
 const GateWay = () => {
   const [networktab, setNetworkTab] = useState(false);
@@ -249,7 +250,8 @@ const GateWay = () => {
           <div className="displaymodalcontent">
             <Modal show={show} onClose={() => setShow(false)}>
               <iframe
-                src={`http://localhost:3003/ramp?onPayCurrency=USD&onRevCurrency=${selectedNetwork.network}&offPayCurrency=${selectedNetwork.network}&offRevCurrency=USD&onPayAmount=${amountInUsd}&offPayAmount=1&network=ETHEREUM?isIntegratorMode=true`}
+                //src={`http://localhost:3003/ramp?onPayCurrency=USD&onRevCurrency=${selectedNetwork.network}&offPayCurrency=${selectedNetwork.network}&offRevCurrency=USD&onPayAmount=${amountInUsd}&offPayAmount=1&network=ETHEREUM?isIntegratorMode=true`}
+                src={`${BASE_URL}?product=BUY&network=optimism&step=summary&onToAddress=${address}&onPayAmount=${amountInUsd}&cryptoList=USDC&fiatList=USD,CAD,GBP,EUR,MXN,COP&productList=BUY&onPayCurrency=${selectedNetwork.network}&onRevCurrency=${selectedNetwork.network}&email=${email}&mode=${transactionType}`}
                 style={{
                   overflow: "auto",
                   height: "100%",
