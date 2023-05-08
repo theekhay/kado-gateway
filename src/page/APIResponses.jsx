@@ -24,6 +24,7 @@ const APIResponses = () => {
                   fontWeight: "400",
                   fontSize: "14px",
                   color: "green",
+                  wordBreak: "break-all",
                 }}
               >
                 {params.api}
@@ -36,7 +37,13 @@ const APIResponses = () => {
                   {params.status} (OK)
                 </span>
               ) : (
-                <span style={{ color: "red", fontWeight: "bolder" }}>
+                <span
+                  style={{
+                    color: "red",
+                    fontWeight: "bolder",
+                    wordBreak: "break-all",
+                  }}
+                >
                   {params.status} (ERROR)
                 </span>
               )}
