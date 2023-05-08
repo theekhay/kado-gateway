@@ -24,7 +24,7 @@ const GetApiState = ({ children }) => {
     dispatch({
       type: URL_BUILDER,
       //payload: `${BASE_URL}?onPayCurrency=USD&onRevCurrency=${currency}&offPayCurrency=${currency}&offRevCurrency=USD&onPayAmount=${amount}&offPayAmount=1&network=ETHEREUM?isIntegratorMode=true`,
-      payload: `${BASE_URL}?product=BUY&network=optimism&step=summary&onToAddress=${address}&onPayAmount=${amount}&cryptoList=USDC&fiatList=USD,CAD,GBP,EUR,MXN,COP&productList=BUY&onPayCurrency=${currency}&onRevCurrency=${currency}&email=${email}&mode=${mode}`,
+      payload: `${BASE_URL}?product=BUY&network=${currency}&step=summary&onToAddress=${address}&onPayAmount=${amount}&cryptoList=USDC&fiatList=USD,CAD,GBP,EUR,MXN,COP&productList=BUY&onPayCurrency=${currency}&onRevCurrency=${currency}&email=${email}&mode=${mode}`,
     });
   };
 

@@ -134,7 +134,7 @@ const GateWay = () => {
     setAmountInUsd(e.target.value);
   };
 
-  console.log(selectedAsset.symbol);
+  console.log(selectedAsset);
 
   useEffect(() => {
     setLoading(true);
@@ -171,6 +171,8 @@ const GateWay = () => {
     } else return;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedNetwork, amountInUsd, email, transactionType, address]);
+
+  console.log(selectedNetwork);
 
   return (
     <div className="gatewaylayout">
@@ -253,7 +255,7 @@ const GateWay = () => {
             <Modal show={show} onClose={() => setShow(false)}>
               <iframe
                 //src={`http://localhost:3003/ramp?onPayCurrency=USD&onRevCurrency=${selectedNetwork.network}&offPayCurrency=${selectedNetwork.network}&offRevCurrency=USD&onPayAmount=${amountInUsd}&offPayAmount=1&network=ETHEREUM?isIntegratorMode=true`}
-                src={`${BASE_URL}?product=BUY&network=optimism&step=summary&onToAddress=${address}&onPayAmount=${amountInUsd}&cryptoList=USDC&fiatList=USD,CAD,GBP,EUR,MXN,COP&productList=BUY&onPayCurrency=${selectedNetwork.network}&onRevCurrency=USDC&email=${email}&mode=${transactionType}`}
+                src={`${BASE_URL}?product=BUY&network=${selectedNetwork.origin}&step=summary&onToAddress=${address}&onPayAmount=${amountInUsd}&cryptoList=USDC&fiatList=USD,CAD,GBP,EUR,MXN,COP&productList=BUY&onPayCurrency=${selectedNetwork.network}&onRevCurrency=${selectedAsset.symbol}&email=${email}&mode=${transactionType}`}
                 style={{
                   overflow: "auto",
                   height: "100%",
