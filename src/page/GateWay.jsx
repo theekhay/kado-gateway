@@ -134,8 +134,6 @@ const GateWay = () => {
     setAmountInUsd(e.target.value);
   };
 
-  console.log(selectedAsset);
-
   useEffect(() => {
     setLoading(true);
     const url = `https://dev-api.kado.money/v1/ramp/quote?amountUsd=${amountInUsd}&blockchain=ethereum&asset=ETH&transactionType=buy&partner=prime_trust&fiatMethod=card`;
@@ -171,8 +169,6 @@ const GateWay = () => {
     } else return;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedNetwork, amountInUsd, email, transactionType, address]);
-
-  console.log(selectedNetwork);
 
   return (
     <div className="gatewaylayout">
@@ -248,6 +244,10 @@ const GateWay = () => {
             selectedAsset={selectedAsset}
             setSelectedAsset={setSelectedAsset}
             setAssetAPIResponse={setAssetAPIResponse}
+            associatedAssets={
+              selectedNetwork.associatedAssets &&
+              selectedNetwork.associatedAssets
+            }
           />
         )}
         {show && (

@@ -5,11 +5,18 @@ import axios from "axios";
 import Spinner from "../components/Spinner";
 import GetApiContext from "../context/get-api-calls/GetApiContext";
 
-const AssetTab = ({ assetTab, setAssetTab, setSelectedAsset }) => {
+const AssetTab = ({
+  assetTab,
+  setAssetTab,
+  setSelectedAsset,
+  associatedAssets,
+}) => {
   const [searchparam, setSearchParam] = useState("");
   const [assets, setAssets] = useState("");
   const [loading, setLoading] = useState(true);
   const { getParams } = useContext(GetApiContext);
+
+  console.log(associatedAssets);
 
   const filteredAssets =
     assets &&
@@ -24,7 +31,8 @@ const AssetTab = ({ assetTab, setAssetTab, setSelectedAsset }) => {
       );
       if (res.status === 200) {
         setLoading(false);
-        setAssets(res?.data?.data?.assets);
+        //setAssets(res?.data?.data?.assets);
+        setAssets(associatedAssets);
         getParams({
           blockchains: res?.data?.data?.assets,
           api: "https://dev-api.kado.money/v1/ramp/supported-assets",
