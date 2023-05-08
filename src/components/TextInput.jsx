@@ -9,6 +9,7 @@ const TextInput = ({
   iconUrl,
   prefix,
   onBlur,
+  locked,
 }) => {
   return (
     <div className="textinput__container">
@@ -30,7 +31,11 @@ const TextInput = ({
         onBlur={onBlur}
       />
       <div className="textinput__button">
-        {onSelectClick && <button onClick={onSelectClick}>Select</button>}
+        {onSelectClick && (
+          <button onClick={onSelectClick} disabled={locked}>
+            Select
+          </button>
+        )}
       </div>
     </div>
   );

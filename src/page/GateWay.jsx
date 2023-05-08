@@ -134,8 +134,6 @@ const GateWay = () => {
     setAmountInUsd(e.target.value);
   };
 
-  console.log(selectedAsset.symbol);
-
   useEffect(() => {
     setLoading(true);
     const url = `https://dev-api.kado.money/v1/ramp/quote?amountUsd=${amountInUsd}&blockchain=ethereum&asset=ETH&transactionType=buy&partner=prime_trust&fiatMethod=card`;
@@ -193,13 +191,18 @@ const GateWay = () => {
                 prefix="Network"
               />
               <TextInput
-                placeholder="Asset"
+                placeholder={
+                  Object.keys(selectedNetwork).length === 0
+                    ? "Select a nework to view assets"
+                    : "Assets"
+                }
                 type="text"
                 disabled={true}
                 onSelectClick={() => setAssetTab(true)}
                 defaultValue={selectedAsset.name}
                 iconUrl={selectedAsset.icon}
                 prefix="Asset"
+                locked={Object.keys(selectedNetwork).length === 0}
               />
               <TextInput
                 placeholder="Email"
