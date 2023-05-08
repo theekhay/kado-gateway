@@ -23,6 +23,9 @@ const GateWay = () => {
   const [statusRes, setStatusRes] = useState("");
   const [transactionMessage, setTransactionMessage] = useState("");
   const [transactionModal, setTransactionModal] = useState(false);
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [transactionType, setTransactionType] = useState("");
 
   const [networkAPIResponse, setNetworkAPIResponse] = useState("");
   const [assetAPIResponse, setAssetAPIResponse] = useState("");
@@ -154,11 +157,17 @@ const GateWay = () => {
   }, [amountInUsd]);
 
   useEffect(() => {
-    if (selectedNetwork && amountInUsd) {
-      urlBuilder(selectedNetwork.network, amountInUsd);
+    if (selectedNetwork && amountInUsd && email && transactionType && address) {
+      urlBuilder(
+        selectedNetwork.network,
+        amountInUsd,
+        address,
+        email,
+        transactionType
+      );
     } else return;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedNetwork, amountInUsd]);
+  }, [selectedNetwork, amountInUsd, email, transactionType, address]);
 
   return (
     <div className="gatewaylayout">
@@ -190,10 +199,25 @@ const GateWay = () => {
                 prefix="Asset"
               />
               <TextInput
+                placeholder="Email"
+                type="email"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <TextInput
+                placeholder="Wallet Address"
+                type="text"
+                onChange={(e) => setAddress(e.target.value)}
+              />
+              <TextInput
                 placeholder="Amount in USD"
                 type="number"
                 onChange={handleAmountChange}
               />
+              <select onChange={(e) => setTransactionType(e.target.value)}>
+                <option>Mode</option>
+                <option value="minimal">Minimal</option>
+                <option value="full">Full</option>
+              </select>
               {loading ? (
                 <p style={{ color: "#fff" }}>Fetching quotes...</p>
               ) : (

@@ -20,12 +20,15 @@ const GetApiState = ({ children }) => {
     });
   };
 
-  const urlBuilder = (currency, amount) => {
+  const urlBuilder = (currency, amount, address, email, mode) => {
     dispatch({
       type: URL_BUILDER,
-      payload: `${BASE_URL}?onPayCurrency=USD&onRevCurrency=${currency}&offPayCurrency=${currency}&offRevCurrency=USD&onPayAmount=${amount}&offPayAmount=1&network=ETHEREUM?isIntegratorMode=true`,
+      //payload: `${BASE_URL}?onPayCurrency=USD&onRevCurrency=${currency}&offPayCurrency=${currency}&offRevCurrency=USD&onPayAmount=${amount}&offPayAmount=1&network=ETHEREUM?isIntegratorMode=true`,
+      payload: `${BASE_URL}?product=BUY&network=optimism&step=summary&onToAddress=${address}&onPayAmount=${amount}&cryptoList=USDC&fiatList=USD,CAD,GBP,EUR,MXN,COP&productList=BUY&onPayCurrency=${currency}&onRevCurrency=${currency}&email=${email}&mode=${mode}`,
     });
   };
+
+  //https://widget-v2--kado.netlify.app/?product=BUY&network=optimism&step=summary&onToAddress=0x294819aa6fbdd12Dd7D6cfca38379Fe3a0c4E38C&onPayAmount=5&cryptoList=USDC&fiatList=USD,CAD,GBP,EUR,MXN,COP&productList=BUY&onPayCurrency=USD&onRevCurrency=USDC&email=andre@kado.money&mode=minimal
 
   const getQuotes = (quotes) => {
     dispatch({

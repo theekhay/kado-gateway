@@ -1,1 +1,1 @@
-export const BASE_URL = "http://localhost:3003/ramp";
+export const BASE_URL = "https://widget-v2--kado.netlify.app";
