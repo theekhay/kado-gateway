@@ -2,7 +2,7 @@ import { useContext } from "react";
 import GetApiContext from "../context/get-api-calls/GetApiContext";
 
 const APIResponses = () => {
-  const { params, url, quotes } = useContext(GetApiContext);
+  const { params, url } = useContext(GetApiContext);
   return (
     <div className="apiresponses__container">
       <div className="apiresponse__header">

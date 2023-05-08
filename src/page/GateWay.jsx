@@ -134,6 +134,8 @@ const GateWay = () => {
     setAmountInUsd(e.target.value);
   };
 
+  console.log(selectedAsset.symbol);
+
   useEffect(() => {
     setLoading(true);
     const url = `https://dev-api.kado.money/v1/ramp/quote?amountUsd=${amountInUsd}&blockchain=ethereum&asset=ETH&transactionType=buy&partner=prime_trust&fiatMethod=card`;
